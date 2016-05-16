@@ -81,8 +81,7 @@
 function setWebhook(){
 	var telegramURL = 'https://api.telegram.org/bot';
 	var botToken = document.getElementById("botTokenSetWebhook").value;
-	//var postURL = telegramURL + botToken + '/setWebhook';
-	var postURL = 'http://localhost/amareman/app/bot/amareman_bot.php';
+	var postURL = telegramURL + botToken + '/setWebhook';
 
 	document.getElementById("addWebhookForm").action = postURL;
 	document.getElementById("addWebhookForm").submit();

@@ -73,7 +73,8 @@ public function handle() {
 		throw new Exception('Invalid JSON!');
 	} else {
 		$this->input = $post;
-		$this->log('input: '.$post);
+		$logArray = print_r($post,true);
+		$this->log('input: '. $logArray);
 	}
 	
 }
