@@ -1,0 +1,18 @@
+;
+; your_bot config file
+; ---------------------
+
+
+; Global Database Setup - select the database type and authentication as required.
+
+[database]
+hostname = localhost
+user = root
+password = 
+dbname = your_bot
+
+
+[telegram]
+token = dsfsfsfsdfsfsf6Bhklj9ewejkmpwqwq
+logfile = bot.log
+logenable = 1
