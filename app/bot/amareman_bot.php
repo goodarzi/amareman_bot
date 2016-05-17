@@ -2,8 +2,8 @@
 
 require '../bootstrap.php';
 header('Access-Control-Allow-Origin: null');
-//date_default_timezone_set("UTC");
-date_default_timezone_set('Asia/Tehran');
+date_default_timezone_set("UTC");
+//date_default_timezone_set('Asia/Tehran');
 
 $telegram = new telegram('amareman_bot.conf');
 
