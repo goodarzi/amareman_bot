@@ -1,7 +1,7 @@
 <?php
 
 require '../bootstrap.php';
-header('Access-Control-Allow-Origin: null');
+//header('Access-Control-Allow-Origin: null');
 date_default_timezone_set("UTC");
 //date_default_timezone_set('Asia/Tehran');
 
@@ -16,23 +16,23 @@ $DBHandle = $telegram->DbConnect();
 
 try {
 	$telegram->handle();
-	
-	$telegram->log($telegram->input['message']['text']);
-	
-	$telegram->log($telegram->input['message']['from']['id']);
+
 	
 	$telegram_id = $telegram->input['message']['from']['id'];
-	if (isset($telegram->input['message']['from']['first_name']))
+	
+	
+/* 	if (isset($telegram->input['message']['from']['first_name']))
 	$user_first_name = $telegram->input['message']['from']['first_name'];
 	
 	if (isset($telegram->input['message']['from']['last_name']))
-	$user_last_name = $telegram->input['message']['from']['last_name'];
+	$user_last_name = $telegram->input['message']['from']['last_name']; */
 
 	$user = check_existing_user($telegram_id) ;
 	
 	if ($user === false) {
 		//new user
 		new_user($telegram->input['message']['from']);
+		$user = check_existing_user($telegram_id) ;
 	} else {
 		update_user($telegram->input['message']['from']);
 	}
@@ -82,16 +82,19 @@ try {
 			switch($bot_command){
 				
 				case "/start";
+					$mylink = "https://telegram.me/amareman_bot?start=" . $user['uniqid'];
+					$send_message = "greeting message.". $mylink;
 					$replyMarkup = array(
-					'keyboard' => array(array("ورود", "عضویت")),
+					'keyboard' => array(array("لینک من", "کنسل")),
 					'one_time_keyboard' => true
 					);
-					sendMessage("سلام من روبات تلگام هستم!");
+					$telegram->sendMessage($send_message, false, $replyMarkup);
 					break;
 				case "/help";
-					sendMessage("ایمیل آدرس عضویت در تلگام را وارد کنید.");
+					$telegram->sendMessage("help message.");
 					break;
 				default:
+					$telegram->sendMessage("invalid command");
 					
 			}// END SWITCH BOT COMMANDS
 		}
@@ -200,13 +203,8 @@ try {
 				);
 				$telegram->sendMessage($send_message,null, $replyMarkup);
 				break;
-				case "";
-				break;
-				case "";
-				break;
-				case "";
-				break;
 				default:
+				$telegram->sendMessage("بای");
 			}
 		}
 	}
