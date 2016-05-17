@@ -4,12 +4,13 @@ class Connection
 {
 	private static $DBHandler;
 	
-	private function __construct($database)
+	private function __construct()
 	{
 		$ADODB_CACHE_DIR = '/tmp';
         /*	$ADODB_FETCH_MODE = ADODB_FETCH_ASSOC;	*/
 
-		$datasource = 'mysqli://' . $database['user'] . ':' . $database['password'] . '@' . $database['hostname'] . '/' . $database['dbname'];
+		//$datasource = 'mysqli://' . $database['user'] . ':' . $database['password'] . '@' . $database['hostname'] . '/' . $database['dbname'];
+		$datasource = 'mysqli://' . USER . ':' . PASS . '@' . HOST . '/' . DBNAME;
 		
 		$DBHandle = NewADOConnection($datasource);
 		
@@ -24,10 +25,10 @@ class Connection
 		self :: $DBHandler = $DBHandle;
     }
 
-	public static function GetDBHandler($database)
+	public static function GetDBHandler()
 	{
 		if (empty (self :: $DBHandler)) {
-			$connection = new Connection($database);
+			$connection = new Connection();
 		}
 		return self :: $DBHandler;
 	}

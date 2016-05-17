@@ -16,6 +16,11 @@ protected $config;
 			$config = parse_ini_file($config_dir.$bot_config_file, true);
 			
 			// conf for the database connection
+			define ("HOST", isset($config['database']['hostname'])?$config['database']['hostname']:null);
+			define ("USER", isset($config['database']['user'])?$config['database']['user']:null);
+			define ("PASS", isset($config['database']['password'])?$config['database']['password']:null);
+			define ("DBNAME", isset($config['database']['dbname'])?$config['database']['dbname']:null);
+
 			if (isset($config['database']['hostname']))		$this->config['database']['hostname'] = $config['database']['hostname'];
 			if (isset($config['database']['user']))		$this->config['database']['user']     = $config['database']['user'];
 			if (isset($config['database']['password']))	$this->config['database']['password'] = $config['database']['password'];
@@ -26,6 +31,7 @@ protected $config;
 				throw new Exception($errMsg);
 			} else {
 				$this->config['telegram']['token'] = $config['telegram']['token'];
+				define ("TOKEN", $config['telegram']['token']);
 			}
 			
 			if (isset($config['telegram']['logfile']) && !empty($config['telegram']['logfile']))
@@ -46,7 +52,8 @@ protected $config;
 
 
 public function DbConnect() {
-    return Connection::GetDBHandler($this->config['database']);
+    //return Connection::GetDBHandler($this->config['database']);
+    return Connection::GetDBHandler();
 }
 
 public function DbDisconnect($DBHandle) {
@@ -89,6 +96,22 @@ public function handle() {
 			);
 		}
 		return 0;
+	}
+	
+	public function sendMessage($message, $chatId = null, $replyMarkup = 0){
+		if ($chatId == null) {
+			$chatId = $this->input['message']['chat']['id'];
+		}
+		$url = "https://api.telegram.org/bot" . $this->config['telegram']['token'] ."/sendMessage?chat_id=" .$chatId . "&text=" .urlencode($message);
+		if ($replyMarkup != 0){
+			$encodedMarkup = json_encode($replyMarkup);
+			$url = $url . "&reply_markup=" . $encodedMarkup;
+		}
+		
+		$string_log = basename(__FILE__) . ' line:' . __LINE__ . ' URL = ' . $url;
+		$this->log('sendMessage: '. $string_log);
+		$result = file_get_contents($url);
+		$this->log('result: '. $result);
 	}
 
 	
